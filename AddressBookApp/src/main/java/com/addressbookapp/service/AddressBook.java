@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import com.addressbookapp.model.Contact;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AddressBook {
 
     private List<Contact> contacts = new ArrayList<>();
