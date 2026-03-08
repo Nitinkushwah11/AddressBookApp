@@ -1,47 +1,42 @@
 package com.addressbookapp.model;
 
-//model folder means what info what application stores
+import java.util.Objects;
+
 public class Contact {
-  String firstName;
-  String lastName;
-  String address;
-  String city;
-  String state;
-  String zip;
-  String phoneNumber;
-  String email;
 
-  public Contact(String firstName , String lastName , String address , String city , String state , String zip , String phoneNumber , String email){
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.address = address;
-      this.city = city;
-      this.state = state;
-      this.zip = zip;
-      this.phoneNumber = phoneNumber;
-      this.email = email;
-  }
+    private String name;
+    private String phone;
+    private String email;
 
-  public Contact(String newName, String newPhone, String newEmail) {
-      this.firstName = newName;
-      this.phoneNumber = newPhone;
-      this.email = newEmail;
-  }
+    public Contact(String name, String phone, String email) {
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+    }
 
-  public void display(){
-      System.out.println(firstName + " " + lastName + " " + address + " "
-              + city + " " + state + " " + zip + " " + phoneNumber + " " + email);
-  }
+    // Getters and Setters
+    public String getName() { return name; }
+    public String getPhone() { return phone; }
+    public String getEmail() { return email; }
+    public void setName(String name) { this.name = name; }
+    public void setPhone(String phone) { this.phone = phone; }
+    public void setEmail(String email) { this.email = email; }
 
-  public String getFirstName(){
-      return firstName;
-  }
+    @Override
+    public String toString() {
+        return "Name: " + name + ", Phone: " + phone + ", Email: " + email;
+    }
 
-  public String getLastName(){
-      return  lastName;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(!(o instanceof Contact)) return false;
+        Contact c = (Contact) o;
+        return this.name.equalsIgnoreCase(c.name);
+    }
 
-  public String getName() {
-      return firstName;
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hash(name.toLowerCase());
+    }
 }
