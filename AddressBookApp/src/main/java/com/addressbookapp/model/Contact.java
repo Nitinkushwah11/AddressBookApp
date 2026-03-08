@@ -26,4 +26,12 @@ public class Contact {
       System.out.println(firstName + " " + lastName + " " + address + " "
               + city + " " + state + " " + zip + " " + phoneNumber + " " + email);
   }
+  
+  public String getFirstName(){
+      return firstName;
+  }
+
+  public String getLastName(){
+      return  lastName;
+  }
 }
