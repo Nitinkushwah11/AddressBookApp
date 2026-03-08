@@ -3,76 +3,63 @@ package com.addressbookapp.util;
 import com.addressbookapp.model.Contact;
 import com.addressbookapp.service.AddressBook;
 
-import java.util.Scanner;
 
+import java.util.Scanner;
 public class AddressBookMain {
 
-
-
     public static void main(String[] args) {
-
         Scanner sc = new Scanner(System.in);
         AddressBook addressBook = new AddressBook();
 
-        // Add initial contact
-        System.out.println("Add a contact:");
-        Contact contact = createContact(sc);
-        addressBook.addContact(contact);
+        System.out.println("Welcome to Address Book Program");
 
-        // Display contacts
-        System.out.println("Contacts before edit:");
-        addressBook.displayContacts();
+        while (true) {
+            System.out.println("\n1. Add Contact\n2. View Contacts\n3. Edit Contact\n4. Delete Contact\n5. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = sc.nextInt();
+            sc.nextLine();
 
-        // Edit contact
-        System.out.println("\nEnter name of contact to edit:");
-        System.out.print("First Name: ");
-        String firstName = sc.nextLine();
-        System.out.print("Last Name: ");
-        String lastName = sc.nextLine();
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter Name: ");
+                    String name = sc.nextLine();
+                    System.out.print("Enter Phone: ");
+                    String phone = sc.nextLine();
+                    System.out.print("Enter Email: ");
+                    String email = sc.nextLine();
+                    addressBook.addContact(new Contact(name, phone, email));
+                    break;
 
-        System.out.println("Enter updated details:");
-        Contact updatedContact = createContact(sc);
+                case 2:
+                    addressBook.displayContacts();
+                    break;
 
-        boolean edited = addressBook.editContact(firstName, lastName, updatedContact);
+                case 3:
+                    System.out.print("Enter Name to edit: ");
+                    String editName = sc.nextLine();
+                    System.out.print("Enter new Name: ");
+                    String newName = sc.nextLine();
+                    System.out.print("Enter new Phone: ");
+                    String newPhone = sc.nextLine();
+                    System.out.print("Enter new Email: ");
+                    String newEmail = sc.nextLine();
+                    addressBook.editContact(editName, new Contact(newName, newPhone, newEmail));
+                    break;
 
-        if (edited) {
-            System.out.println("Contact updated successfully!");
-        } else {
-            System.out.println("Contact not found.");
+                case 4:
+                    System.out.print("Enter Name to delete: ");
+                    String delName = sc.nextLine();
+                    addressBook.deleteContact(delName);
+                    break;
+
+                case 5:
+                    System.out.println("Exiting...");
+                    sc.close();
+                    System.exit(0);
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
         }
-
-        // Display contacts after edit
-        System.out.println("Contacts after edit:");
-        addressBook.displayContacts();
     }
-
-    // Helper method to create a contact from console input
-    private static Contact createContact(Scanner sc) {
-        System.out.print("Enter First Name: ");
-        String firstName = sc.nextLine();
-
-        System.out.print("Enter Last Name: ");
-        String lastName = sc.nextLine();
-
-        System.out.print("Enter Address: ");
-        String address = sc.nextLine();
-
-        System.out.print("Enter City: ");
-        String city = sc.nextLine();
-
-        System.out.print("Enter State: ");
-        String state = sc.nextLine();
-
-        System.out.print("Enter Zip: ");
-        String zip = sc.nextLine();
-
-        System.out.print("Enter Phone Number: ");
-        String phone = sc.nextLine();
-
-        System.out.print("Enter Email: ");
-        String email = sc.nextLine();
-
-        return new Contact(firstName, lastName, address, city, state, zip, phone, email);
-    }
-
-    }
+}
