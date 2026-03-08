@@ -31,3 +31,25 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Compiled class files
+*.class
+
+# Logs
+*.log
+
+# Maven
+target/
+
+# STS / Eclipse
+.project
+.classpath
+.settings/
+
+# IntelliJ
+.idea/
+*.iml
+
+# OS Files
+.DS_Store
+Thumbs.db
