@@ -21,13 +21,19 @@ public class AddressBookMain {
 
             switch (choice) {
                 case 1:
-                    System.out.print("Enter Name: ");
-                    String name = sc.nextLine();
-                    System.out.print("Enter Phone: ");
-                    String phone = sc.nextLine();
-                    System.out.print("Enter Email: ");
-                    String email = sc.nextLine();
-                    addressBook.addContact(new Contact(name, phone, email));
+                    System.out.print("How many contacts you want to add? ");
+                    int n = sc.nextInt();
+                    sc.nextLine();
+                    for (int i = 0; i < n; i++) {
+                        System.out.println("\nEnter details for contact " + (i + 1));
+                        System.out.print("Enter Name: ");
+                        String name = sc.nextLine();
+                        System.out.print("Enter Phone: ");
+                        String phone = sc.nextLine();
+                        System.out.print("Enter Email: ");
+                        String email = sc.nextLine();
+                        addressBook.addContact(new Contact(name, phone, email));
+                    }
                     break;
 
                 case 2:
