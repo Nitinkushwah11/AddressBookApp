@@ -96,7 +96,7 @@ public class AddressBook {
         return contacts.stream()
                 .collect(Collectors.groupingBy(Contact::getState));
     }
-    
+
     public Map<String, Long> countByCity() {
 
         return contacts.stream()
@@ -109,5 +109,34 @@ public class AddressBook {
         return contacts.stream()
                 .collect(Collectors.groupingBy(Contact::getState, Collectors.counting()));
 
+    }
+
+    public List<Contact> sortByName() {
+
+        return contacts.stream()
+                .sorted((c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName()))
+                .collect(Collectors.toList());
+
+    }
+
+    public List<Contact> sortByCity() {
+
+        return contacts.stream()
+                .sorted((c1, c2) -> c1.getCity().compareToIgnoreCase(c2.getCity()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Contact> sortByState() {
+
+        return contacts.stream()
+                .sorted((c1, c2) -> c1.getState().compareToIgnoreCase(c2.getState()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Contact> sortByZip() {
+
+        return contacts.stream()
+                .sorted((c1, c2) -> c1.getZip().compareToIgnoreCase(c2.getZip()))
+                .collect(Collectors.toList());
     }
 }

@@ -10,14 +10,17 @@ public class Contact {
     private String email;
     private String city;
     private String state;
+    private String zip;
 
-    public Contact(String name, String phone, String email, String city, String state) {
+    public Contact(String name, String phone, String email, String city, String state, String zip) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.city = city;
         this.state = state;
+        this.zip = zip;
     }
+
     // Getters and setters
     public String getName() { return name; }
     public String getPhone() { return phone; }
@@ -30,11 +33,17 @@ public class Contact {
     public void setEmail(String email) { this.email = email; }
     public void setCity(String city) { this.city = city; }
     public void setState(String state) { this.state = state; }
-
+    public String getZip() {
+        return zip;
+    }
     @Override
     public String toString() {
-        return "Name: " + name + ", Phone: " + phone + ", Email: " + email +
-                ", City: " + city + ", State: " + state;
+        return "Name: " + name +
+                ", Phone: " + phone +
+                ", Email: " + email +
+                ", City: " + city +
+                ", State: " + state +
+                ", Zip: " + zip;
     }
 
     // Equals & hashCode for duplicate check by name
