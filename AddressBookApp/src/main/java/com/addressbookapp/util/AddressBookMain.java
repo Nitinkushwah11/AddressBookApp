@@ -23,6 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.util.Scanner;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class AddressBookMain {
 
     public static void main(String[] args) {
@@ -80,9 +85,6 @@ public class AddressBookMain {
                         System.out.println("8. Count Contacts by City");
                         System.out.println("9. Count Contacts by State");
                         System.out.println("10. Sort Contacts by Name");
-                        System.out.println("11. Sort Contacts by City");
-                        System.out.println("12. Sort Contacts by State");
-                        System.out.println("13. Sort Contacts by Zip");
 
                         int op = sc.nextInt();
                         sc.nextLine();
@@ -91,14 +93,14 @@ public class AddressBookMain {
 
                             case 1:
 
-                                System.out.println("Enter Name:");
-                                String nameInput = sc.next();
+                                System.out.println("Enter First Name:");
+                                String firstName = sc.next();
+
+                                System.out.println("Enter Last Name:");
+                                String lastName = sc.next();
 
                                 System.out.println("Enter Phone:");
                                 String phone = sc.next();
-
-                                System.out.println("Enter Email:");
-                                String email = sc.next();
 
                                 System.out.println("Enter City:");
                                 String city = sc.next();
@@ -106,10 +108,7 @@ public class AddressBookMain {
                                 System.out.println("Enter State:");
                                 String state = sc.next();
 
-                                System.out.println("Enter Zip:");
-                                String zip = sc.next();
-
-                                Contact contact = new Contact(nameInput, phone, email, city, state, zip);
+                                Contact contact = new Contact(firstName, lastName, phone, city, state);
                                 currentBook.addContact(contact);
 
                                 break;
@@ -189,26 +188,6 @@ public class AddressBookMain {
                                 List<Contact> sortedContacts = currentBook.sortByName();
 
                                 sortedContacts.forEach(System.out::println);
-
-                                break;
-
-                            case 11:
-
-                                List<Contact> citySorted = currentBook.sortByCity();
-                                citySorted.forEach(System.out::println);
-
-                                break;
-                            case 12:
-
-                                List<Contact> stateSorted = currentBook.sortByState();
-                                stateSorted.forEach(System.out::println);
-
-                                break;
-
-                            case 13:
-
-                                List<Contact> zipSorted = currentBook.sortByZip();
-                                zipSorted.forEach(System.out::println);
 
                                 break;
 
