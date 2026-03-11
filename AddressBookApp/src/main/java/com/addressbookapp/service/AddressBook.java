@@ -104,7 +104,7 @@ public class AddressBook {
 
     }
 
-    public Map<String, Long> countByState() {
+    public Map<String,Long> countByState() {
 
         return contacts.stream()
                 .collect(Collectors.groupingBy(Contact::getState, Collectors.counting()));
