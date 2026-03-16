@@ -1,6 +1,11 @@
 package com.addressbookapp.service;
 
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -117,5 +122,33 @@ public class AddressBook {
                 .sorted((c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName()))
                 .collect(Collectors.toList());
 
+    }
+    
+    public void writeContactsToFile(String fileName) {
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for(Contact c : contacts) {
+                writer.write(c.getName() + "," + c.getPhone() + "," + c.getEmail() + "," +
+                        c.getCity() + "," + c.getState());
+                writer.newLine();
+            }
+            System.out.println("Contacts written to file successfully.");
+        } catch(IOException e) {
+            System.out.println("Error writing file: " + e.getMessage());
+        }
+    }
+
+    public void readContactsFromFile(String fileName) {
+        try(BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if(data.length < 5) continue;
+                Contact contact = new Contact(data[0], data[1], data[2], data[3], data[4]);
+                contacts.add(contact);
+            }
+            System.out.println("Contacts loaded from file.");
+        } catch(IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
+        }
     }
 }
