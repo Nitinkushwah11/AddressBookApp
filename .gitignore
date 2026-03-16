@@ -40,3 +40,20 @@ Thumbs.db
 
 # Temporary files
 ~$*
+
+# Maven
+target/
+
+# Wrapper files
+mvnw
+mvnw.cmd
+.mvn/
+
+# Git files
+.gitattributes
+
+# IDE files
+.classpath
+.project
+.settings/
+.metadata/

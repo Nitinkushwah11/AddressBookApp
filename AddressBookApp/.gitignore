@@ -53,3 +53,20 @@ target/
 # OS Files
 .DS_Store
 Thumbs.db
+
+# Maven
+target/
+
+# Wrapper files
+mvnw
+mvnw.cmd
+.mvn/
+
+# Git files
+.gitattributes
+
+# IDE files
+.classpath
+.project
+.settings/
+.metadata/
