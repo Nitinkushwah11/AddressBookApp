@@ -1,7 +1,10 @@
 package com.addressbookapp.service;
 
 
+
 import com.addressbookapp.model.Contact;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
@@ -141,6 +144,29 @@ public class AddressBook {
             System.out.println("Contacts saved to CSV successfully!");
         } catch (IOException e) {
             System.out.println("Error writing CSV: " + e.getMessage());
+        }
+    }
+
+    public void writeContactsToJSON(String fileName) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (FileWriter writer = new FileWriter(fileName)) {
+            gson.toJson(this.contacts, writer);
+            System.out.println("Contacts saved to JSON successfully!");
+        } catch (IOException e) {
+            System.out.println("Error writing JSON: " + e.getMessage());
+        }
+    }
+
+    public void readContactsFromJSON(String fileName) {
+        Gson gson = new Gson();
+        try (FileReader reader = new FileReader(fileName)) {
+            Contact[] contactArray = gson.fromJson(reader, Contact[].class);
+            if(contactArray != null) {
+                contacts.addAll(Arrays.asList(contactArray));
+            }
+            System.out.println("Contacts loaded from JSON successfully!");
+        } catch (IOException e) {
+            System.out.println("Error reading JSON: " + e.getMessage());
         }
     }
 }

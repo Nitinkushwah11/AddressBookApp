@@ -32,6 +32,8 @@ import java.util.*;
 
 import java.util.*;
 
+import java.util.*;
+
 public class AddressBookMain {
 
     public static void main(String[] args) {
@@ -81,6 +83,8 @@ public class AddressBookMain {
                         System.out.println("10. Sort Contacts by Name");
                         System.out.println("11. Write Contacts to File");
                         System.out.println("12. Read Contacts from File");
+                        System.out.println("13. Write Contacts to JSON");
+                        System.out.println("14. Read Contacts from JSON");
 
                         int op = sc.nextInt(); sc.nextLine();
 
@@ -135,6 +139,17 @@ public class AddressBookMain {
                                 System.out.println("Enter CSV filename to load:");
                                 String loadFile = sc.next();
                                 currentBook.readContactsFromCSV(loadFile);
+                                break;
+
+                            case 13:
+                                System.out.println("Enter JSON filename to save:");
+                                String saveJson = sc.next();
+                                currentBook.writeContactsToJSON(saveJson);
+                                break;
+                            case 14:
+                                System.out.println("Enter JSON filename to load:");
+                                String loadJson = sc.next();
+                                currentBook.readContactsFromJSON(loadJson);
                                 break;
                         }
                         if(op == 5) break;
