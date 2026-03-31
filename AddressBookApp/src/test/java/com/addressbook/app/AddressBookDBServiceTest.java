@@ -2,6 +2,7 @@ package com.addressbook.app;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -112,6 +113,53 @@ public class AddressBookDBServiceTest {
         assertEquals("Chicago", retrievedContact.getCity(), "City should match");
         
         System.out.println("Successfully added and verified contact: " + newContact.getFirstName() + " " + newContact.getLastName());
+    }
+
+    @Test
+    public void testAddMultipleContacts() {
+        // Create multiple test contacts
+        List<Contact> contacts = new ArrayList<>();
+        
+        contacts.add(new Contact(
+            "Alice", "Johnson", "111 First St", "Seattle",
+            "WA", "98101", "555-0201", "alice.j@example.com"
+        ));
+        
+        contacts.add(new Contact(
+            "Bob", "Williams", "222 Second St", "Portland",
+            "OR", "97201", "555-0202", "bob.w@example.com"
+        ));
+        
+        contacts.add(new Contact(
+            "Charlie", "Brown", "333 Third St", "Denver",
+            "CO", "80201", "555-0203", "charlie.b@example.com"
+        ));
+        
+        contacts.add(new Contact(
+            "Diana", "Davis", "444 Fourth St", "Austin",
+            "TX", "78701", "555-0204", "diana.d@example.com"
+        ));
+        
+        contacts.add(new Contact(
+            "Eve", "Miller", "555 Fifth St", "Miami",
+            "FL", "33101", "555-0205", "eve.m@example.com"
+        ));
+        
+        // Add multiple contacts using threads
+        int successCount = dbService.addMultipleContacts(contacts);
+        
+        assertEquals(5, successCount, "All 5 contacts should be added successfully");
+        
+        // Verify some contacts were added
+        Contact alice = dbService.getContactByName("Alice", "Johnson");
+        assertNotNull(alice, "Alice should be in database");
+        assertEquals("Seattle", alice.getCity(), "Alice's city should match");
+        
+        Contact eve = dbService.getContactByName("Eve", "Miller");
+        assertNotNull(eve, "Eve should be in database");
+        assertEquals("Miami", eve.getCity(), "Eve's city should match");
+        
+        System.out.println("Successfully added and verified " + successCount + " contacts using multi-threading");
     }
 }
 
