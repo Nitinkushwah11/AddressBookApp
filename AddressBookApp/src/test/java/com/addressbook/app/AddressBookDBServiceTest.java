@@ -3,6 +3,7 @@ package com.addressbook.app;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -76,5 +77,19 @@ public class AddressBookDBServiceTest {
         List<Contact> contacts = dbService.getContactsByDateRange("2023-01-01", "2024-12-31");
         assertNotNull(contacts, "Contacts list should not be null");
         System.out.println("Retrieved " + contacts.size() + " contacts within date range");
+    }
+
+    @Test
+    public void testGetCountByCity() {
+        Map<String, Long> cityCount = dbService.getCountByCity();
+        assertNotNull(cityCount, "City count map should not be null");
+        System.out.println("City count: " + cityCount);
+    }
+
+    @Test
+    public void testGetCountByState() {
+        Map<String, Long> stateCount = dbService.getCountByState();
+        assertNotNull(stateCount, "State count map should not be null");
+        System.out.println("State count: " + stateCount);
     }
 }

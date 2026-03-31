@@ -2,7 +2,9 @@ package com.addressbook.app;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddressBookDBService {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/addressbook_db";
@@ -178,5 +180,45 @@ public class AddressBookDBService {
         }
 
         return contacts;
+    }
+
+    public Map<String, Long> getCountByCity() {
+        Map<String, Long> cityCount = new HashMap<>();
+        String query = "SELECT city, COUNT(*) as count FROM contacts GROUP BY city";
+
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                cityCount.put(rs.getString("city"), rs.getLong("count"));
+            }
+            System.out.println("Retrieved count by city from database.");
+
+        } catch (SQLException e) {
+            System.out.println("Error retrieving count by city: " + e.getMessage());
+        }
+
+        return cityCount;
+    }
+
+    public Map<String, Long> getCountByState() {
+        Map<String, Long> stateCount = new HashMap<>();
+        String query = "SELECT state, COUNT(*) as count FROM contacts GROUP BY state";
+
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                stateCount.put(rs.getString("state"), rs.getLong("count"));
+            }
+            System.out.println("Retrieved count by state from database.");
+
+        } catch (SQLException e) {
+            System.out.println("Error retrieving count by state: " + e.getMessage());
+        }
+
+        return stateCount;
     }
 }

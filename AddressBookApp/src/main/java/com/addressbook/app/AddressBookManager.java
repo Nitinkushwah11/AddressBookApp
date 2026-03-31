@@ -302,4 +302,32 @@ public class AddressBookManager {
             }
         }
     }
+
+    public void displayCountByCityFromDB() {
+        AddressBookDBService dbService = new AddressBookDBService();
+        Map<String, Long> cityCount = dbService.getCountByCity();
+        
+        if (cityCount.isEmpty()) {
+            System.out.println("No contacts found in database!");
+        } else {
+            System.out.println("\n=== Count of Persons by City (From Database) ===");
+            cityCount.forEach((city, count) -> 
+                System.out.println(city + ": " + count + " person(s)")
+            );
+        }
+    }
+
+    public void displayCountByStateFromDB() {
+        AddressBookDBService dbService = new AddressBookDBService();
+        Map<String, Long> stateCount = dbService.getCountByState();
+        
+        if (stateCount.isEmpty()) {
+            System.out.println("No contacts found in database!");
+        } else {
+            System.out.println("\n=== Count of Persons by State (From Database) ===");
+            stateCount.forEach((state, count) -> 
+                System.out.println(state + ": " + count + " person(s)")
+            );
+        }
+    }
 }
