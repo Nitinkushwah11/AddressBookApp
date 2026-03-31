@@ -221,4 +221,61 @@ public class AddressBookDBService {
 
         return stateCount;
     }
+
+    public boolean addContact(Contact contact) {
+        String query = "INSERT INTO contacts (first_name, last_name, address, city, state, zip, phone_number, email, date_added) " +
+                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURDATE())";
+        
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        
+        try {
+            conn = getConnection();
+            conn.setAutoCommit(false); // Start transaction
+            
+            pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, contact.getFirstName());
+            pstmt.setString(2, contact.getLastName());
+            pstmt.setString(3, contact.getAddress());
+            pstmt.setString(4, contact.getCity());
+            pstmt.setString(5, contact.getState());
+            pstmt.setString(6, contact.getZip());
+            pstmt.setString(7, contact.getPhoneNumber());
+            pstmt.setString(8, contact.getEmail());
+            
+            int rowsAffected = pstmt.executeUpdate();
+            
+            if (rowsAffected > 0) {
+                conn.commit(); // Commit transaction
+                System.out.println("Contact added successfully to database.");
+                return true;
+            } else {
+                conn.rollback(); // Rollback if no rows affected
+                System.out.println("Failed to add contact to database.");
+                return false;
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Error adding contact to database: " + e.getMessage());
+            if (conn != null) {
+                try {
+                    conn.rollback(); // Rollback on error
+                    System.out.println("Transaction rolled back.");
+                } catch (SQLException ex) {
+                    System.out.println("Error rolling back transaction: " + ex.getMessage());
+                }
+            }
+            return false;
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) {
+                    conn.setAutoCommit(true); // Restore auto-commit
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+    }
 }

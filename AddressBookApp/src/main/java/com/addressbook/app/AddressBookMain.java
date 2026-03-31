@@ -32,7 +32,8 @@ public class AddressBookMain {
             System.out.println("18. Write Address Book to JSON");
             System.out.println("19. Read Address Book from JSON");
             System.out.println("20. Load Address Book from Database");
-            System.out.println("21. Exit");
+            System.out.println("21. Add Contact to Database");
+            System.out.println("22. Exit");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -99,6 +100,9 @@ public class AddressBookMain {
                     loadFromDatabase(scanner, manager);
                     break;
                 case 21:
+                    addContactToDatabase(scanner, manager);
+                    break;
+                case 22:
                     exit = true;
                     System.out.println("Exiting Address Book System...");
                     break;
@@ -400,4 +404,43 @@ public class AddressBookMain {
 
         manager.loadFromDatabase(bookName);
     }
+
+    private static void addContactToDatabase(Scanner scanner, AddressBookManager manager) {
+        System.out.print("\nEnter Address Book Name (for in-memory sync): ");
+        String bookName = scanner.nextLine();
+
+        // Create the address book if it doesn't exist
+        if (!manager.hasAddressBook(bookName)) {
+            manager.addAddressBook(bookName);
+        }
+
+        System.out.println("\n--- Enter Contact Details ---");
+        System.out.print("First Name: ");
+        String firstName = scanner.nextLine();
+
+        System.out.print("Last Name: ");
+        String lastName = scanner.nextLine();
+
+        System.out.print("Address: ");
+        String address = scanner.nextLine();
+
+        System.out.print("City: ");
+        String city = scanner.nextLine();
+
+        System.out.print("State: ");
+        String state = scanner.nextLine();
+
+        System.out.print("ZIP: ");
+        String zip = scanner.nextLine();
+
+        System.out.print("Phone Number: ");
+        String phoneNumber = scanner.nextLine();
+
+        System.out.print("Email: ");
+        String email = scanner.nextLine();
+
+        Contact contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
+        manager.addContactToDB(bookName, contact);
+    }
 }
+

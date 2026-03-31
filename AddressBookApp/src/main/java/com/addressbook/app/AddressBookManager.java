@@ -330,4 +330,23 @@ public class AddressBookManager {
             );
         }
     }
+
+    public void addContactToDB(String bookName, Contact contact) {
+        AddressBookDBService dbService = new AddressBookDBService();
+        
+        // Add to database
+        boolean success = dbService.addContact(contact);
+        
+        // If successful, also add to in-memory address book
+        if (success) {
+            AddressBook book = addressBooks.get(bookName);
+            if (book != null) {
+                book.getContacts().add(contact);
+                System.out.println("Contact also added to in-memory address book.");
+            } else {
+                System.out.println("Warning: Address book '" + bookName + "' not found in memory.");
+            }
+        }
+    }
 }
+
