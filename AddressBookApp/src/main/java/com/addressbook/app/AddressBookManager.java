@@ -192,4 +192,114 @@ public class AddressBookManager {
             System.out.println("Address Book '" + bookName + "' loaded from file successfully!");
         }
     }
+
+    public void writeToCSV(String bookName, String fileName) {
+        AddressBook book = addressBooks.get(bookName);
+        if (book != null) {
+            AddressBookCSVIO.writeToCSV(fileName, book);
+        } else {
+            System.out.println("Address Book not found!");
+        }
+    }
+
+    public void readFromCSV(String bookName, String fileName) {
+        AddressBook book = AddressBookCSVIO.readFromCSV(fileName);
+        if (book != null && !book.getContacts().isEmpty()) {
+            addressBooks.put(bookName, book);
+            System.out.println("Address Book '" + bookName + "' loaded from CSV file successfully!");
+        }
+    }
+
+    public void writeToJSON(String bookName, String fileName) {
+        AddressBook book = addressBooks.get(bookName);
+        if (book != null) {
+            AddressBookJSONIO.writeToJSON(fileName, book);
+        } else {
+            System.out.println("Address Book not found!");
+        }
+    }
+
+    public void readFromJSON(String bookName, String fileName) {
+        AddressBook book = AddressBookJSONIO.readFromJSON(fileName);
+        if (book != null && !book.getContacts().isEmpty()) {
+            addressBooks.put(bookName, book);
+            System.out.println("Address Book '" + bookName + "' loaded from JSON file successfully!");
+        }
+    }
+
+    public void loadFromDatabase(String bookName) {
+        AddressBookDBService dbService = new AddressBookDBService();
+        AddressBook book = dbService.retrieveAddressBook();
+        
+        if (book != null && !book.getContacts().isEmpty()) {
+            addressBooks.put(bookName, book);
+            System.out.println("Address Book '" + bookName + "' loaded from database successfully!");
+        } else {
+            System.out.println("No contacts found in database.");
+        }
+    }
+
+    public void updateContactInDB(String bookName, String firstName, String lastName, Contact updatedContact) {
+        AddressBook book = addressBooks.get(bookName);
+        if (book == null) {
+            System.out.println("Address Book not found!");
+            return;
+        }
+
+        // Update in memory
+        boolean updated = book.editContact(firstName, lastName, updatedContact);
+        
+        if (updated) {
+            // Sync with database
+            AddressBookDBService dbService = new AddressBookDBService();
+            boolean dbUpdated = dbService.updateContact(firstName, lastName, updatedContact);
+            
+            if (dbUpdated) {
+                System.out.println("Contact updated and synced with database successfully!");
+            } else {
+                System.out.println("Failed to sync with database.");
+            }
+        }
+    }
+
+    public boolean isContactInSync(String firstName, String lastName, Contact memoryContact) {
+        AddressBookDBService dbService = new AddressBookDBService();
+        Contact dbContact = dbService.getContactByName(firstName, lastName);
+        
+        if (dbContact == null) {
+            System.out.println("Contact not found in database.");
+            return false;
+        }
+        
+        boolean isInSync = memoryContact.equals(dbContact) &&
+                          memoryContact.getAddress().equals(dbContact.getAddress()) &&
+                          memoryContact.getCity().equals(dbContact.getCity()) &&
+                          memoryContact.getState().equals(dbContact.getState()) &&
+                          memoryContact.getZip().equals(dbContact.getZip()) &&
+                          memoryContact.getPhoneNumber().equals(dbContact.getPhoneNumber()) &&
+                          memoryContact.getEmail().equals(dbContact.getEmail());
+        
+        if (isInSync) {
+            System.out.println("Contact is in sync with database.");
+        } else {
+            System.out.println("Contact is NOT in sync with database.");
+        }
+        
+        return isInSync;
+    }
+
+    public void getContactsByDateRange(String startDate, String endDate) {
+        AddressBookDBService dbService = new AddressBookDBService();
+        List<Contact> contacts = dbService.getContactsByDateRange(startDate, endDate);
+        
+        if (contacts.isEmpty()) {
+            System.out.println("No contacts found for the specified date range.");
+        } else {
+            System.out.println("\nContacts added between " + startDate + " and " + endDate + ":");
+            for (int i = 0; i < contacts.size(); i++) {
+                System.out.println("\n--- Contact " + (i + 1) + " ---");
+                System.out.println(contacts.get(i));
+            }
+        }
+    }
 }
