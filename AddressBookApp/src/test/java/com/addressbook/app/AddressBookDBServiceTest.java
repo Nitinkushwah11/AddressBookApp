@@ -92,4 +92,26 @@ public class AddressBookDBServiceTest {
         assertNotNull(stateCount, "State count map should not be null");
         System.out.println("State count: " + stateCount);
     }
+
+    @Test
+    public void testAddContact() {
+        // Create a new test contact
+        Contact newContact = new Contact(
+            "Jane", "Smith", "789 Pine St", "Chicago",
+            "IL", "60601", "555-0103", "jane.smith@example.com"
+        );
+        
+        boolean result = dbService.addContact(newContact);
+        assertTrue(result, "Contact should be added successfully");
+        
+        // Verify the contact was added
+        Contact retrievedContact = dbService.getContactByName("Jane", "Smith");
+        assertNotNull(retrievedContact, "Retrieved contact should not be null");
+        assertEquals("Jane", retrievedContact.getFirstName(), "First name should match");
+        assertEquals("Smith", retrievedContact.getLastName(), "Last name should match");
+        assertEquals("Chicago", retrievedContact.getCity(), "City should match");
+        
+        System.out.println("Successfully added and verified contact: " + newContact.getFirstName() + " " + newContact.getLastName());
+    }
 }
+
