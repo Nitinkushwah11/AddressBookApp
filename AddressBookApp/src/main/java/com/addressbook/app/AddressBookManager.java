@@ -348,5 +348,23 @@ public class AddressBookManager {
             }
         }
     }
+
+    public void addMultipleContactsToDB(String bookName, List<Contact> contacts) {
+        AddressBookDBService dbService = new AddressBookDBService();
+        
+        // Add multiple contacts to database using threads
+        int successCount = dbService.addMultipleContacts(contacts);
+        
+        // If successful, also add to in-memory address book
+        if (successCount > 0) {
+            AddressBook book = addressBooks.get(bookName);
+            if (book != null) {
+                book.getContacts().addAll(contacts);
+                System.out.println(successCount + " contact(s) also added to in-memory address book.");
+            } else {
+                System.out.println("Warning: Address book '" + bookName + "' not found in memory.");
+            }
+        }
+    }
 }
 

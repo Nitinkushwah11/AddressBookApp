@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AddressBookDBService {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/addressbook_db";
@@ -278,4 +282,64 @@ public class AddressBookDBService {
             }
         }
     }
+
+    public int addMultipleContacts(List<Contact> contacts) {
+        if (contacts == null || contacts.isEmpty()) {
+            System.out.println("No contacts to add!");
+            return 0;
+        }
+
+        int threadPoolSize = Math.min(contacts.size(), 4); // Use max 4 threads
+        ExecutorService executor = Executors.newFixedThreadPool(threadPoolSize);
+        AtomicInteger successCount = new AtomicInteger(0);
+        AtomicInteger failureCount = new AtomicInteger(0);
+
+        System.out.println("Starting multi-threaded insertion of " + contacts.size() + " contacts using " + threadPoolSize + " threads...");
+        long startTime = System.currentTimeMillis();
+
+        // Submit tasks to thread pool
+        for (Contact contact : contacts) {
+            executor.submit(() -> {
+                try {
+                    boolean result = addContact(contact);
+                    if (result) {
+                        successCount.incrementAndGet();
+                        System.out.println("Thread " + Thread.currentThread().getName() + 
+                                         " successfully added: " + contact.getFirstName() + " " + contact.getLastName());
+                    } else {
+                        failureCount.incrementAndGet();
+                        System.out.println("Thread " + Thread.currentThread().getName() + 
+                                         " failed to add: " + contact.getFirstName() + " " + contact.getLastName());
+                    }
+                } catch (Exception e) {
+                    failureCount.incrementAndGet();
+                    System.out.println("Thread " + Thread.currentThread().getName() + 
+                                     " encountered error: " + e.getMessage());
+                }
+            });
+        }
+
+        // Shutdown executor and wait for completion
+        executor.shutdown();
+        try {
+            if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
+                executor.shutdownNow();
+                System.out.println("Warning: Some tasks did not complete within timeout.");
+            }
+        } catch (InterruptedException e) {
+            executor.shutdownNow();
+            System.out.println("Thread pool interrupted: " + e.getMessage());
+            Thread.currentThread().interrupt();
+        }
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("\n=== Multi-threaded Insertion Complete ===");
+        System.out.println("Total contacts: " + contacts.size());
+        System.out.println("Successfully added: " + successCount.get());
+        System.out.println("Failed: " + failureCount.get());
+        System.out.println("Time taken: " + (endTime - startTime) + " ms");
+
+        return successCount.get();
+    }
 }
+

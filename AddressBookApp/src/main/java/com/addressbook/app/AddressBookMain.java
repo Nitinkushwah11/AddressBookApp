@@ -1,5 +1,6 @@
 package com.addressbook.app;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -33,7 +34,8 @@ public class AddressBookMain {
             System.out.println("19. Read Address Book from JSON");
             System.out.println("20. Load Address Book from Database");
             System.out.println("21. Add Contact to Database");
-            System.out.println("22. Exit");
+            System.out.println("22. Add Multiple Contacts to Database (with Threads)");
+            System.out.println("23. Exit");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -103,6 +105,9 @@ public class AddressBookMain {
                     addContactToDatabase(scanner, manager);
                     break;
                 case 22:
+                    addMultipleContactsToDatabase(scanner, manager);
+                    break;
+                case 23:
                     exit = true;
                     System.out.println("Exiting Address Book System...");
                     break;
@@ -441,6 +446,59 @@ public class AddressBookMain {
 
         Contact contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
         manager.addContactToDB(bookName, contact);
+    }
+
+    private static void addMultipleContactsToDatabase(Scanner scanner, AddressBookManager manager) {
+        System.out.print("\nEnter Address Book Name (for in-memory sync): ");
+        String bookName = scanner.nextLine();
+
+        // Create the address book if it doesn't exist
+        if (!manager.hasAddressBook(bookName)) {
+            manager.addAddressBook(bookName);
+        }
+
+        System.out.print("How many contacts do you want to add? ");
+        int count = scanner.nextInt();
+        scanner.nextLine();
+
+        if (count <= 0) {
+            System.out.println("Invalid number of contacts!");
+            return;
+        }
+
+        List<Contact> contacts = new ArrayList<>();
+
+        for (int i = 1; i <= count; i++) {
+            System.out.println("\n--- Enter Contact " + i + " Details ---");
+            System.out.print("First Name: ");
+            String firstName = scanner.nextLine();
+
+            System.out.print("Last Name: ");
+            String lastName = scanner.nextLine();
+
+            System.out.print("Address: ");
+            String address = scanner.nextLine();
+
+            System.out.print("City: ");
+            String city = scanner.nextLine();
+
+            System.out.print("State: ");
+            String state = scanner.nextLine();
+
+            System.out.print("ZIP: ");
+            String zip = scanner.nextLine();
+
+            System.out.print("Phone Number: ");
+            String phoneNumber = scanner.nextLine();
+
+            System.out.print("Email: ");
+            String email = scanner.nextLine();
+
+            Contact contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
+            contacts.add(contact);
+        }
+
+        manager.addMultipleContactsToDB(bookName, contacts);
     }
 }
 
